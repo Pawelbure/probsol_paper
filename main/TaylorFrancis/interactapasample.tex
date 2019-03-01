@@ -1,0 +1,121 @@
+% interactapasample.tex
+% v1.05 - August 2017
+
+\documentclass[]{interact}
+
+\usepackage{epstopdf}% To incorporate .eps illustrations using PDFLaTeX, etc.
+\usepackage[caption=false]{subfig}% Support for small, `sub' figures and tables
+%\usepackage[nolists,tablesfirst]{endfloat}% To `separate' figures and tables from text if required
+%\usepackage[doublespacing]{setspace}% To produce a `double spaced' document if required
+%\setlength\parindent{24pt}% To increase paragraph indentation when line spacing is doubled
+
+%\usepackage[longnamesfirst,sort]{natbib}% Citation support using natbib.sty
+%\bibpunct[, ]{(}{)}{;}{a}{,}{,}% Citation support using natbib.sty
+%\renewcommand\bibfont{\fontsize{10}{12}\selectfont}% To set the list of references in 10 point font using natbib.sty
+
+\usepackage{subfiles}
+\usepackage{standalone}
+\usepackage{url}
+
+\usepackage[natbibapa,nodoi]{apacite}% Citation support using apacite.sty. Commands using natbib.sty MUST be deactivated first!
+%\setlength\bibhang{12pt}% To set the indentation in the list of references using apacite.sty. Commands using natbib.sty MUST be deactivated first!
+%\renewcommand\bibliographytypesize{\fontsize{10}{12}\selectfont}% To set the list of references in 10 point font using apacite.sty. Commands using natbib.sty MUST be deactivated first!
+
+\usepackage{wasysym} % male and female symbols
+\usepackage{floatpag}
+\usepackage{float}
+\usepackage{changepage}
+\usepackage{threeparttable}
+\usepackage{tcolorbox}
+
+\usepackage[section]{placeins} % floating barrier
+
+\newcommand{\dq}{"}
+
+% ##################
+% Tikz 
+
+\usepackage{pgfplots}
+\pgfmathdeclarefunction{gauss}{2}{%
+  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
+}
+
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{decorations.pathmorphing,patterns,positioning,calc,intersections,through,backgrounds,arrows,automata,shadings,decorations.pathreplacing}
+
+
+\tikzset{
+    state/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           minimum height=2em,
+           inner sep=6pt,
+           text centered,
+           }, >=stealth',
+}
+
+% ####################
+
+
+
+\begin{document}
+
+%\articletype{ARTICLE TEMPLATE}% Specify the article type or omit as appropriate
+
+\title{Physics expertise in light of cognitive and affective variables -- Evidence from the PhysicsOlympiad}
+
+\author{
+\name{Peter Wulff\textsuperscript{a}\thanks{CONTACT Peter Wulff. Email: peter.wulff@uni-potsdam.de}, Stefan Petersen\textsuperscript{b}, Tim H\"o{}ffler\textsuperscript{b}, and Knut Neumann\textsuperscript{b}}
+\affil{\textsuperscript{a}University of Potsdam, Karl-Liebknecht-Stra\ss e 24/25, 14476 Potsdam-Golm \\ \textsuperscript{b}Leibniz Institute for Science and Mathematics Education, Olshausenstrasse 62, 24118 Kiel, Germany}
+}
+
+\maketitle
+
+\begin{abstract}
+Given the need for high-achieving students to engage in science, technology, engineering, and math (STEM), this study seeks to characterize successful students in the Physics Olympiad as a means to enable future educational efforts to be more in congruence with the characteristics of the students. On the basis of the expectancy-value model of achievement motivation and research in expertise, $N=141$ students were tracked in their engagement with the Physics Olympiad and administered appropriate motivational and cognitive constructs. The dependent outcome variable was the success the students had in their participation in the Physics Olympiad. Results indicate that successful students can be characterized through high skills in physics problem solving and positive motivational attributes, namely a high expectation to be successful in the Physics Olympiad. These results pave the path to more transparency for what comprises expertise in domains like physics such that designated educational efforts can motivate and foster more students.
+\end{abstract}
+
+\begin{keywords}
+Problem solving, Physics competitions
+\end{keywords}
+
+\maketitle
+
+%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/intro/intro}
+
+%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/theory/theory}
+
+%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/method/method}
+
+%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/method_instruments/method_instruments}
+
+%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/results}
+
+%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/discussion/discussion}
+
+
+\section*{Acknowledgement(s)}
+
+
+\section*{Disclosure statement}
+
+We are not aware of potential conflicts of interest that relate to the results reported in this study.
+
+
+
+\newpage
+
+\bibliographystyle{apacite}
+\bibliography{C:/Users/Peter/Documents/bibliography/bib}
+
+
+\newpage
+\section{Appendices}
+
+\appendix
+
+
+
+\end{document}

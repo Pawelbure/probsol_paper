@@ -1,0 +1,87 @@
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+
+
+
+
+
+
+\section{Results}
+
+
+Since the motivational variables are self-reported measures and the cognitive variables likely tap similar cognitive abilities, it is necessary to investigate the correlations among the variables first in order to verify that no multi-collinearity is present. The correlations (Table \ref{correlation_table}) show values in the range between $-0.2-0.42$. However, most values are lower such that no multicollinearity is present. One pattern in the correlation matrix is that the cognitive variables correlate significantly amongst each other and the motivational variables correlate significantly amongst each other in positive directions. Social support shows almost no significant correlation with another variable. Interestingly, self-efficacy in physics is not correlated with cognitive variables, which is quiet counter-intuitive given the literature on self-efficacy (see: Bandura, 1997). Expectancy of success in the competition, however, is significantly correlated with the cognitive variables, possibly because it is more context-specific such that students can better judge their actual ability.
+
+\begin{sidewaystable}
+\caption{Correlations among measured variables.}
+\label{correlation_table}
+% latex table generated in R 3.4.3 by xtable 1.8-2 package
+% Sun Jan 06 16:08:03 2019
+\begin{tabular}{lcccccccccc}
+  \toprule
+Measure & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ 
+  \midrule
+1 Problem comprehension & - & .27** & .28*** & .10 & .18* & .18* & .01 & .01 & .40*** & .31*** \\ 
+  2 Heuristic physics problem solving &  & - & .15 & .01 & .25** & -.09 & .05 & .09 & .32*** & .16 \\ 
+  3 Cog. abilities &  &  & - & .04 & .18* & .01 & -.02 & -.20* & .16 & .13 \\ 
+  4 Self-efficacy physics &  &  &  & - & .37*** & .28*** & .42*** & .12 & .12 & -.18* \\ 
+  5 Expectancy physics competition &  &  &  &  & - & .21* & .34*** & .18* & .29*** & .04 \\ 
+  6 Value physics competition &  &  &  &  &  & - & .28*** & .07 & .13 & -.07 \\ 
+  7 Sense of belonging &  &  &  &  &  &  & - & .19* & .000 & -.01 \\ 
+  8 Social support in physics &  &  &  &  &  &  &  & - & .01 & -.16 \\ 
+  9 Highest round &  &  &  &  &  &  &  &  & - & .08 \\ 
+  10 Age &  &  &  &  &  &  &  &  &  & - \\ 
+   \bottomrule
+\end{tabular}\end{sidewaystable}
+
+
+
+
+In order to characterize successful particupants (RQ 1), generalized linear models that account for the ordinal metric of the dependent variable are utilized. Cognitive and motivational variables are included as predictors for highest qualified round (dependent variable). Achievement in round 1 in the physics Olympiad was omitted as a cognitive variable because of the high correlation with the other cognitive measures that were of more interest to us. Proportional odds models were used in order to predict success in the Physics Olympiad in a hierarchical regression procedure (Field, 2012). First, cognitive variables were included as predictors in the model because these predictors can be considered most important for characterizing successful students in the Physics Olympiad based on prior research. In a second step, cognitive variables and motivational variables were jointly entered in the model.
+
+Generalized linear models, as any mathematical model, come with certain assumptions that need be tested prior to conducting the analysis. The modelling assumption of parallel slopes holds in our case, $\chi^2=2.2, p=.53$. 
+
+The interesting parameters in the model are the effects (not the intercepts). The effects can be interpreted in accordance with the regression parameters in linear regression (B\"u{}rkner \& Vuorre, 2018). Table \ref{propOddModel} shows the results from the analysis. As can be expected, physics problem conceptualization and generic physics problem solving are significantly positively related with highest qualified round of the participants. The relationship holds when entering the motivational variables to the model. When all variables are included in the model, expectancy of success in the competition shows a significant positive relationship with highest qualified round as well. No other effects become significant and thus characterize successful students in this study. Physics problem conceptualization has the highest odds ratio, and thus a change in physics problem conceptualization of one standard deviation has the highest contribution to the likelihood of a student to reach a higher round. In order to graphically represent this relationship, Figure \ref{problem_concept_skills} depicts highest round over physics problem conceptualization skills.
+
+
+\begin{table}
+\caption{Proportional odds model for predicting highest qualified round in the physics Olympiad with various predictors.}
+\label{propOddModel}
+% latex table generated in R 3.4.3 by xtable 1.8-2 package
+% Sun Jan 06 16:08:05 2019
+\begin{tabular}{llcccc}
+  \toprule
+ & $\beta$ & $SE(\beta)$ & $z$ & $p$ & $OR$ \\ 
+  \midrule
+Phys. Prob. Conceptualization  & 0.71 & 0.19 & 3.65 & $<.001$ & 2.03 \\ 
+  Heur. Phys. Prob. Sol.  & 0.51 & 0.19 & 2.68 & $<.01$ & 1.66 \\ 
+  kft.c.imp.2  & 0.09 & 0.18 & 0.48 & $.63$ & 1.09 \\ 
+   &  &  &  &  &  \\ 
+  $R^2_{\text{adj}}$ & 0.24 &  &  &  &  \\ 
+  \midrule Phys. Prob. Conceptualization & 0.7 & 0.21 & 3.28 & $<.001$ & 2.02 \\ 
+  Heur. Phys. Prob. Sol. & 0.48 & 0.2 & 2.4 & $<.05$ & 1.61 \\ 
+  Cog. abilities & 0.02 & 0.19 & 0.12 & $.90$ & 1.02 \\ 
+  Self eff. & 0.1 & 0.22 & 0.44 & $.66$ & 1.1 \\ 
+  Exp. phy. comp. & 0.54 & 0.22 & 2.45 & $<.01$ & 1.72 \\ 
+  Val. phy. comp. & 0.14 & 0.2 & 0.71 & $.48$ & 1.15 \\ 
+  Sen. of bel. & -0.32 & 0.21 & -1.52 & $.13$ & 0.73 \\ 
+  Soc. sup. & -0.05 & 0.19 & -0.24 & $.81$ & 0.95 \\ 
+  Age & -0.11 & 0.2 & -0.57 & $.57$ & 0.89 \\ 
+    &  &  &  &  &  \\ 
+  $R^2_{\text{adj}}$  & 0.3 &  &  &  &  \\ 
+   \bottomrule
+\end{tabular}\end{table}
+
+
+
+\begin{figure}
+\centering
+% \includegraphics[width=.7\textwidth]{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+\input{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/img/boxplot}
+\caption{Problem conceptualization scores over highest achieved round of participant.}
+\label{problem_concept_skills}
+\end{figure}
+
+\end{document}

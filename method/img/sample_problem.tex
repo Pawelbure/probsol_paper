@@ -1,0 +1,27 @@
+\documentclass[C:/Users/sunpn505/OneDrive/Documents/Dissertation/FINAL_tex/main/main]{subfiles}
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth',scale=.7]
+
+\newcommand{\R}{3}
+\draw (-7,\R+2) to [bend right=45] (0,-\R);
+\draw (0,0) circle(\R);
+
+\draw[|<->|] (-7.2,-\R) -- node[left] {$h$} (-7.2,\R+1);
+\draw[->] (0,0) -- node[above right] {$R$} +(160:\R);
+\draw[-] (-8,-\R) -- (5,-\R);a
+          
+\draw (-6.5,\R+1) circle(.5) node[yshift = 20] {(1)};
+\draw (-6.5,\R+1) circle(.5) node {$m$};
+
+\draw (0,\R-.5) circle(.5) node[yshift = 20] {(2)};
+\draw (0,\R-.5) circle(.5) node {$m$};
+
+\draw[dashed] (0,\R-.5) circle (.5);  
+          
+\end{tikzpicture}
+
+
+
+\end{document}

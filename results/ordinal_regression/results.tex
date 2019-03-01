@@ -1,0 +1,135 @@
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+
+
+
+
+
+
+\section{Results}
+
+The primary interest is on Problem comprehension (PC). The correlations (Table \ref{correlation_table}) among the variables indicate that ability for problem comprehension and heuristic physics problem solving are significantly related to the highest round of the participants in the competition. The motivational scales, on the other hand, have no apparent relation to success in the physics Olympiad as measured through highest qualified round. Neither do the motivational measures relate to the other cognitive measures such as content knowledge and ability of problem conceptualization. Moreover, the sense of belonging tends to correlate negatively with the other variables.
+
+\begin{sidewaystable}
+\caption{Correlations among measured variables.}
+\label{correlation_table}
+% latex table generated in R 3.4.3 by xtable 1.8-2 package
+% Wed Sep 26 19:40:11 2018
+\begin{tabular}{lcccccccccc}
+  \toprule
+Measure & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ 
+  \midrule
+1 Heuristic physics problem solving & - & .27 & .29* & .33** & .32* & .03 & .03 & .26 & -.09 & .16 \\ 
+  2 Problem comprehension &  & - & .32** & .41*** & .32* & .10 & .01 & .18 & .19 & .31** \\ 
+  3 Achievement round 1 &  &  & - & .68*** & .33** & .000 & -.07 & .25 & .09 & .05 \\ 
+  4 Highest round &  &  &  & - & .25 & .12 & -.01 & .29* & .12 & .08 \\ 
+  5 Cog. abilities &  &  &  &  & - & -.02 & -.10 & .12 & .000 & .09 \\ 
+  6 Self-efficacy physics &  &  &  &  &  & - & .42*** & .37*** & .28* & -.18 \\ 
+  7 Sense of belonging &  &  &  &  &  &  & - & .34** & .29* & -.01 \\ 
+  8 Expectancy physics competition &  &  &  &  &  &  &  & - & .21 & .04 \\ 
+  9 Value physics competition &  &  &  &  &  &  &  &  & - & -.07 \\ 
+  10 Age &  &  &  &  &  &  &  &  &  & - \\ 
+   \bottomrule
+\end{tabular}\end{sidewaystable}
+
+
+
+\begin{figure}
+\centering
+\includegraphics[width=.6\textwidth]{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+% \input{C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+\caption{Problem conceptualization scores over highest achieved round of participant.}
+\label{problem_concept_skills}
+\end{figure}
+
+
+
+
+In order to estimate the effect of ability of problem conceptualization on success in the physics Olympiad (RQ 1), generalized linear models that account for the ordinal metric of the dependent variable are utilized. Furthermore, covariates that were established in previous research are included into the models in order to assess how stable the effects are. However, achievement in round 1 in the physics Olympiad was omitted as a covariate because of the high correlation with the other cognitive measures that were of more interest to us. We use proportional odds models in order to predict success in the physics Olympiad. 
+
+The modelling assumptions of parallel slopes hold in our case, $\chi^2=0.04, p=.98$. The interesting parameters in the model are the effects (not the intercepts), which can be interpreted in accordance with the regression parameters in linear regression (Bürkner \& Vuorre, 2018). Table \ref{propOddModel} shows the results from the analysis. As can be expected, generic physics problem solving and physics problem conceptualization are significantly positively related with highest qualified round of the participants. The relationship holds when entering the predictors to the models. 
+
+When analyzing the influence of the categories (concept, context, execution, and detail) with the following effects when fit jointly in a proportional odds model, $\beta=0.24, SE(\beta)=0.12, z=2.01, p<.05$; $\beta=0.21, SE(\beta)=0.15, z=1.4, p=.16$; $\beta=0.09, SE(\beta)=0.18, z=0.51, p=.61$; $\beta=-0.21, SE(\beta)=0.15, z=-1.4, p=.16$ respectively. Consequently, only concept appears to have a significant contribution when all are fit together. Note that the mean correlation of the categories is very high, 0.69 (0.48-0.88). When only one category is inserted in the model at a time, the coefficients are $\beta=0.33, SE(\beta)=0.07, z=4.58, p<.001$; $\beta=0.42, SE(\beta)=0.1, z=4.22, p<.001$; $\beta=0.37, SE(\beta)=0.09, z=4.31, p<.001$; $\beta=0.18, SE(\beta)=0.12, z=1.49, p=.14$ respectively.
+
+\begin{table}
+\caption{Proportional odds model for predicting highest qualified round in the physics Olympiad with various predictors.}
+\label{propOddModel}
+% latex table generated in R 3.4.3 by xtable 1.8-2 package
+% Wed Sep 26 19:40:14 2018
+\begin{tabular}{llcccc}
+  \toprule
+ & $b$ & $SE(b)$ & $z$ & $p$ & $OR$ \\ 
+  \midrule
+Generic physics problem solving & 0.55 & 0.2 & 2.8 & $<.01$ & 1.74 \\ 
+  Problem conceptualization & 0.68 & 0.2 & 3.48 & $<.001$ & 1.98 \\ 
+   &  &  &  &  &  \\ 
+  $R^2_{\text{adj}}$ & 0.35 &  &  &  &  \\ 
+  \midrule Intercept  HPPL & 0.45 & 0.22 & 2.03 & $<.05$ & 1.56 \\ 
+  PC & 0.61 & 0.23 & 2.65 & $<.01$ & 1.84 \\ 
+  Cog. abilities & 0.19 & 0.21 & 0.91 & $.36$ & 1.21 \\ 
+  Self eff. & 0.03 & 0.24 & 0.11 & $.92$ & 1.03 \\ 
+  Sen. of bel. & -0.31 & 0.23 & -1.35 & $.18$ & 0.74 \\ 
+  Exp. phy. comp. & 0.68 & 0.25 & 2.75 & $<.01$ & 1.98 \\ 
+  Val. phy. comp. & 0.03 & 0.22 & 0.12 & $.90$ & 1.03 \\ 
+  Age & -0.28 & 0.23 & -1.21 & $.23$ & 0.75 \\ 
+    &  &  &  &  &  \\ 
+  $R^2_{\text{adj}}$  & 0.46 &  &  &  &  \\ 
+   \bottomrule
+\end{tabular}\end{table}
+
+
+When considering the covariates as well (RQ 2), the effects for the problem solving ability measures remain. Additionally, expectancy of success in the physics Olmypiad is significantly positively related to highest round (see Table \ref{propOddModel}). 
+
+
+\subsection{Exploring the mediation hypothesis:} Baron \& Kenny (1986) outline that a mediator ''accounts for the relation between the predictor and the criterion.'' Do we have the expectation that problem comprehension accounts for the relation between heuristic problem solving and highest round? It can in fact be argued that this expectation is justified. For example, the heuristics in problem solving are formed over extensive periods of practice that is grounded in problem comprehension as the gateway to problem solving. Kenny and Baron propose a four step process in order to ascertain whether a mediation effect is present. All the criteria that they outline are present for this assumed relationship of problem comprehension being the mediator between heuristic problem solving and highest round. See Figure \ref{structuralModel} depicts the model coefficients between the variables.  
+
+
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[>=stealth']
+
+\node[state,
+  text width=3cm,
+  fill=white,
+  anchor = center] (X) {HPPL};
+
+\node[state,
+  anchor=center,
+  text width=3cm,
+  xshift=3cm,
+  yshift=3cm,
+  fill=white,
+  text width=4cm,
+  anchor = center] (M) {PC};
+   
+\node[state,    	
+  text width=3cm, 
+  xshift=6cm,
+  fill=white, 
+  anchor=center] (Y) { Highest round };
+
+\path[->] (X) edge node[left,midway] {0.27**} (M)
+ (M) edge node[right,midway] {0.31***} (Y)
+ (X) edge node[above,midway] {0.25**} (Y);
+
+\end{tikzpicture}
+\caption{Structural model for the assumed mediation effect.}
+\label{structuralModel}
+\end{figure}
+
+
+The size of the direct effect $c=0.33$ is equal to the effect calculated from the mediation model $c'=0.33$. This is not very surprising given the fact that no covariates are included in the model (note that the effects remain when expectancy for success is included in the model) and no missing data is present. 26 percent of the total effect is mediated by problem comprehension.
+
+Further in-depth considerations regarding mediation analyses concern the following points that we each briefly address (Gelfand et al., 2009):
+\begin{itemize}
+\item Reliability of measures: It is key to analyzing a mediation effect that the mediator is measured reliably. In fact, we ascertained that the internal consistency and the retest-reliability are acceptable such that this requirement is met.
+\item The No-omitted-variables assumption holds that all relevant variables have been included in the models. We contend that we cannot be sure whether this holds true in the current case. Theoretically, we submit that the assumed mechanism is plausible, however, research in the competition contexts with the specific requirements for success in the competition are no well established such that we might have missed other variables.
+\item Confirmatory-exploratory distinction: We stress that the mediator analysis in this case is merely an exploration of possible mechanisms that might be at work for successful physics problem solving.
+\item Temporal order: The problem solving measures were simultaneously recorded after the students received the message whether they made it to the next round and highest round was measured after the respective rounds were finished and the students received their scores. Consequently, there might be some motivational aspects give rise to better scores in physics problem solving. These effects cannot be controlled for however.
+\end{itemize}
+
+\end{document}

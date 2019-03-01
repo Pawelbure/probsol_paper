@@ -1,0 +1,7 @@
+\contentsline {section}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {2}Expertise in physics problem solving}{2}
+\contentsline {section}{\numberline {3}Method}{4}
+\contentsline {section}{\numberline {4}Results}{8}
+\contentsline {section}{\numberline {5}Discussion}{11}
+\contentsline {section}{\numberline {6}References}{13}
+\contentsline {section}{\numberline {7}Appendices}{16}

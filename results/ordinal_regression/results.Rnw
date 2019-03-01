@@ -1,0 +1,314 @@
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+\SweaveOpts{concordance=F, echo = F, results = tex}
+
+
+<<>>=
+setwd("D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/")
+library(tables)
+library(psych)
+library(xtable)
+library(ggplot2)
+library(BasicFunctions)
+library(car)
+library(pastecs)
+library(rstan)
+library(openxlsx)
+library(VGAM)
+library(tikzDevice)
+library(diagram)
+
+load("D:/studies/WinnerS/Erhebungen/IPhO1718/data/clean/data.RData")
+load("D:/studies/WinnerS/Erhebungen/IPhO1718/codebook/scales.RData")
+cb <- read.xlsx( "D:/studies/WinnerS/Erhebungen/IPhO1718/codebook/codebook.xlsx" )
+
+# necessary variables:
+# vars <- c("apt.c.2","mcphy.c.2","probSol.c.2","achievR1.1","Quali","kft.c.imp.2","swk.phy.1","sob.1","expComp.1","valComp.1","Age.1")
+vars <- c("apt.c.2","probSol.c.2","achievR1.1","Quali","kft.c.imp.2","swk.phy.1",
+          "sob.1","expComp.1","valComp.1","Age.1")
+
+varsX <- gsub( "\\.2|\\.1", "", vars)
+add <- ifelse( !substr( vars, nchar(vars)-1, nchar(vars) )%in%c(".1",".2"), "", substr( vars, nchar(vars)-1, nchar(vars) ) )
+
+
+# ## adopt problem solving scale:
+# attrx <- attributes( s$probSol.c )
+# s$probSol.c <- grep("execution",s$probSol.c, value = T, invert = T)
+# s$probSol.c <- grep("elko|loop",s$probSol.c, value = T, invert = F)
+# attributes( s$probSol.c ) <- attrx
+# 
+# d$probSol.c.2 <- ifelse( apply( is.na( d[ ,paste0( s$probSol.c, ".2" ) ] ), 1, all ), NA,
+#                          rowSums( d[ ,paste0( s$probSol.c, ".2" ) ], na.rm = T ) )
+
+# exclude students with qualified round=4:
+d <- subset( d, Quali!=4 )
+
+# only students that have all cognitive measures:
+# df <- subset( d, Code%in%na.omit( d[,c("Code",vars)] )$Code )
+df <- subset( d, Code%in%na.omit( d[,c("Code",vars[c(2,3)])] )$Code )
+@
+
+
+
+\section{Results}
+
+The primary interest is on \Sexpr{ paste0( attr( s$probSol.c, "name" ), " (", attr(s$probSol.c, "name.short"), ")" ) }. The correlations (Table \ref{correlation_table}) among the variables indicate that ability for problem comprehension and heuristic physics problem solving are significantly related to the highest round of the participants in the competition. The motivational scales, on the other hand, have no apparent relation to success in the physics Olympiad as measured through highest qualified round. Neither do the motivational measures relate to the other cognitive measures such as content knowledge and ability of problem conceptualization. Moreover, the sense of belonging tends to correlate negatively with the other variables.
+
+\begin{sidewaystable}
+\caption{Correlations among measured variables.}
+\label{correlation_table}
+<<>>=
+ctab <- corrTab(vars = vars, data = df, real.names = unlist( lapply( varsX, function(x) attr( s[[x]], "name" ) ) ), with.means = F )
+print( xtable( ctab, align = paste0( c("ll",rep("c",ncol(ctab)-1)), collapse = "" ) ),
+             booktabs = T, sanitize.text.function = function(x) x, include.rownames = F, floating = F )
+
+@
+\end{sidewaystable}
+
+
+<<>>=
+pdf(file = "img/boxplot.pdf", width = 5, height = 3)
+ggplot( df, aes(x=factor( Quali ),y=probSol.c.2 ) ) + geom_boxplot() +
+  geom_jitter(shape=16, position=position_jitter(0.2)) + theme_bw() + ylab("Problem comprehension") + xlab("Highest round") + coord_flip()
+invisible( dev.off() )
+@
+
+\begin{figure}
+\centering
+\includegraphics[width=.6\textwidth]{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+% \input{C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+\caption{Problem conceptualization scores over highest achieved round of participant.}
+\label{problem_concept_skills}
+\end{figure}
+
+<<>>=
+# scaling variables:
+df <- cbind( df[ , c( vars[ vars%in%c("achievR1.1","Quali") ], "Code" ) ],
+             apply( df[ ,vars[ !vars%in%c("achievR1.1","Quali") ] ], 2, scale ) )
+
+########################
+# ordinal regression:
+fitA <- vglm( Quali ~ apt.c.2 + probSol.c.2, data = df, family = cumulative(parallel=T, reverse = T))
+fitB <- vglm( Quali ~ apt.c.2 + probSol.c.2, data = df, family = cumulative(parallel=F, reverse = T))
+
+## test for parallel slopes assumption
+parallel.slopes <- lrtest(fitA,fitB)
+
+#R^2 Nagelkerke
+p0 <- vglm(Quali ~ 1, data = df, family = propodds)
+p0.ll <- logLik(p0)
+N <- length(df[, 1])
+pFull.ll <- logLik(fitA)
+R2.nagel <- as.vector((1 - exp((2/N) * (p0.ll - pFull.ll)))/(1 - exp(p0.ll)^(2/N)))
+# R2.nagel
+
+# create output table
+tab2 <- data.frame( coefficients( summary(fitA) ), check.names = F )
+tab2$OR <- exp( tab2[,1] )
+tab2 <- round( tab2, 2 )
+row.names(tab2)[ match( c("apt.c.2","probSol.c.2"), row.names(tab2) ) ] <- c("Generic physics problem solving","Problem conceptualization")
+tab3 <- matrix( "", ncol = 5, nrow = 2 )
+row.names(tab3) <- c("","$R^2_{\\text{adj}}$")
+tab3[2,1] <- round( R2.nagel, 2 )
+colnames(tab3) <- colnames(tab2)
+
+tab2 <- rbind( tab2, tab3 )
+tab2 <- tab2[-c(1:max(grep("Intercept",rownames(tab2)))),]
+colnames(tab2) <- c("$b$","$SE(b)$","$z$","$p$","$OR$")
+tab2$`$p$` <- give.star( as.numeric( tab2$`$p$` ), modus = "semi.text" )
+
+
+#############################################
+# with covariates:
+vars <- c("apt.c.2","probSol.c.2","Quali","kft.c.imp.2","swk.phy.1","sob.1","expComp.1","valComp.1","Age.1")
+form1 <- paste0( vars[ !vars%in%c("Quali") ], collapse = " + " )
+fitC <- vglm( as.formula( paste0( "Quali ~", form1 ) ) , data = df, family = cumulative(parallel=T, reverse = T ))
+
+# create output table:
+tab4 <- data.frame( coefficients( summary(fitC) ), check.names = F )
+tab4$OR <- exp( tab4[,1] )
+tab4 <- round( tab4, 2 )
+# delete intercepts:
+tab4 <- tab4[-c(1:max(grep("Intercept",rownames(tab4)))),]
+row.names(tab4) <- substitute.names( row.names(tab4), substitute_codes = data.frame( code = c( cb$scale, "kft.c.imp"), name = c(cb$scale.c.short, "Cog. abilities" ) ), delete = c(".1",".2"), codebk.there = F )
+
+#R^2 Nagelkerke
+pFull.ll.2 <- logLik(fitC)
+R2.nagel.2 <- as.vector((1 - exp((2/N) * (p0.ll - pFull.ll.2)))/(1 - exp(p0.ll)^(2/N)))
+# R2.nagel
+
+
+tab5 <- matrix( "", ncol = 5, nrow = 2 )
+row.names(tab5) <- c("","$R^2_{\\text{adj}}$")
+tab5[2,1] <- round( R2.nagel.2, 2 )
+colnames(tab5) <- colnames(tab4)
+
+tab4 <- rbind( tab4, tab5 )
+colnames(tab4) <- c("$b$","$SE(b)$","$z$","$p$","$OR$")
+tab4$`$p$` <- give.star( as.numeric( tab4$`$p$` ), modus = "semi.text" )
+
+tab2 <- rbind( tab2, tab4 )
+
+# adjust names a little..
+row.names( tab2 )[5] <- paste0( "\\midrule Intercept  ", row.names( tab2 )[5])
+row.names( tab2 )[c(nrow(tab2)-1,nrow(tab2))] <- gsub( "1"," ",row.names( tab2 )[c(nrow(tab2)-1,nrow(tab2))] )
+@
+
+
+<<>>=
+# analyze for single categories:
+new.dat <- data.frame( Code = d$Code, 
+            concept = apply( d[ ,grep("\\.concept\\.2", names(d) ) ], 1, sum, na.rm = T ),
+            context = apply( d[ ,grep("\\.context\\.2", names(d) ) ], 1, sum, na.rm = T ),
+            detail = apply( d[ ,grep("\\.detail\\.2", names(d) ) ], 1, sum, na.rm = T ),
+            execution = apply( d[ ,grep("\\.execution\\.2", names(d) ) ], 1, sum, na.rm = T ) )
+df <- merge( x = df, y = new.dat, by = "Code", all.x = T )
+
+fitA2 <- vglm( Quali ~ concept + context + execution + detail, data = df, family = cumulative(parallel=T, reverse = T))
+fitA2 <- summary( fitA2 )
+
+fitA3 <- lapply( c("concept","context","execution","detail"), function(x){
+  form <- paste0( "Quali ~", x )
+  coefficients( summary( vglm( as.formula( form ), data = df, family = cumulative(parallel=T, reverse = T)) ) )[3,]
+})
+fitA3 <- data.frame( do.call("rbind", fitA3) )
+
+AA <- base::t( coefficients( fitA2 )[-c(1,2),] )
+idx <- give.star( AA[4,], modus = "semi.text", tex = F )
+idx[ grep("<",idx, invert = T) ] <- paste0( "=", idx[ grep("<",idx, invert = T) ] )
+
+AA <- lapply( 1:4, function(x) {
+  paste0( paste0( c("$\\\\beta=","SE(\\\\beta)=","z="), round( AA[1:3,x], 2 ), collapse = ", " ),  paste0( ", p", idx, "$" )[x] )
+  })
+
+BB <- base::t( fitA3 )
+idx <- give.star( BB[4,], modus = "semi.text", tex = F )
+idx[ grep("<",idx, invert = T) ] <- paste0( "=", idx[ grep("<",idx, invert = T) ] )
+
+BB <- lapply( 1:4, function(x) {
+  paste0( paste0( c("$\\\\beta=","SE(\\\\beta)=","z="), round( BB[1:3,x], 2 ), collapse = ", " ),  paste0( ", p", idx, "$" )[x] )
+  })
+@
+
+In order to estimate the effect of ability of problem conceptualization on success in the physics Olympiad (RQ 1), generalized linear models that account for the ordinal metric of the dependent variable are utilized. Furthermore, covariates that were established in previous research are included into the models in order to assess how stable the effects are. However, achievement in round 1 in the physics Olympiad was omitted as a covariate because of the high correlation with the other cognitive measures that were of more interest to us. We use proportional odds models in order to predict success in the physics Olympiad. 
+
+The modelling assumptions of parallel slopes hold in our case, \Sexpr{paste0( "$\\\\chi^2=", round( parallel.slopes@Body$Chisq[2], 2 ), ", p=", gsub( "\\$", "", give.star( parallel.slopes@Body$`Pr(>Chisq)`[2], modus = "semi.text" ) ), "$" )}. The interesting parameters in the model are the effects (not the intercepts), which can be interpreted in accordance with the regression parameters in linear regression (Bürkner \& Vuorre, 2018). Table \ref{propOddModel} shows the results from the analysis. As can be expected, generic physics problem solving and physics problem conceptualization are significantly positively related with highest qualified round of the participants. The relationship holds when entering the predictors to the models. 
+
+When analyzing the influence of the categories (concept, context, execution, and detail) with the following effects when fit jointly in a proportional odds model, \Sexpr{paste0( unlist( AA ), collapse = "; " ) } respectively. Consequently, only concept appears to have a significant contribution when all are fit together. Note that the mean correlation of the categories is very high, \Sexpr{round( mean( cor( new.dat[,-1] )[ lower.tri( cor( new.dat[,-1] ) ) ] ), 2 )} (\Sexpr{paste0( round( range( cor( new.dat[,-1] )[ lower.tri( cor( new.dat[,-1] ) ) ] ), 2 ), collapse = "-" )}). When only one category is inserted in the model at a time, the coefficients are \Sexpr{paste0( unlist( BB ), collapse = "; " ) } respectively.
+
+\begin{table}
+\caption{Proportional odds model for predicting highest qualified round in the physics Olympiad with various predictors.}
+\label{propOddModel}
+<<>>=
+print( xtable( tab2, align = paste0( c("ll",rep("c",ncol(tab2)-1)), collapse = "" ) ),
+             booktabs = T, sanitize.text.function = function(x) x, include.rownames = T, only.contents = F, floating = F )
+@
+\end{table}
+
+
+When considering the covariates as well (RQ 2), the effects for the problem solving ability measures remain. Additionally, expectancy of success in the physics Olmypiad is significantly positively related to highest round (see Table \ref{propOddModel}). 
+
+
+\subsection{Exploring the mediation hypothesis:} Baron \& Kenny (1986) outline that a mediator ''accounts for the relation between the predictor and the criterion.'' Do we have the expectation that problem comprehension accounts for the relation between heuristic problem solving and highest round? It can in fact be argued that this expectation is justified. For example, the heuristics in problem solving are formed over extensive periods of practice that is grounded in problem comprehension as the gateway to problem solving. Kenny and Baron propose a four step process in order to ascertain whether a mediation effect is present. All the criteria that they outline are present for this assumed relationship of problem comprehension being the mediator between heuristic problem solving and highest round. See Figure \ref{structuralModel} depicts the model coefficients between the variables.  
+
+
+<<>>=
+# mediation model:
+X <- "apt.c"
+Y <- "Quali"
+M <- "probSol.c"
+dd <- data.frame(X = df[,paste0( X, ifelse( is.na( attr(s[[X]], "time")[1] ), "", paste0( ".", attr(s[[X]], "time")[1] ) ) )],
+                 Y = df[,paste0( Y, ifelse( is.na( attr(s[[Y]], "time")[1] ), "", paste0( ".", attr(s[[Y]], "time")[1] ) ) )],
+                 M = df[,paste0( M, ifelse( is.na( attr(s[[M]], "time")[1] ), "", paste0( ".", attr(s[[M]], "time")[1] ) ) )] )
+dd <- apply( dd, 2, scale )
+
+c <- coefficients( summary( lm( dd[,2] ~ dd[,1] )) )[2,]
+a <- coefficients( summary( lm( dd[,3] ~ dd[,1] )) )[2,]
+c_bar <- coefficients( summary( lm( dd[,2] ~ dd[,1] + dd[,3] )) )[2,]
+b_bar <- coefficients( summary( lm( dd[,2] ~ dd[,1] + dd[,3] )) )[3,]
+
+a.txt <- as.character( paste0( round( a[1], 2 ), give.star(a[4]) ) )
+b_bar.txt <- as.character( paste0( round( b_bar[1], 2 ), give.star(b_bar[4]) ) )
+c_bar.txt <- as.character( paste0( round( c_bar[1], 2 ), give.star(c_bar[4]) ) )
+
+# c[1] > c_bar[1] # indicates mediation; rule: if c' is smaller than c, the data are consistent with mediation; if c' is larger than c, the data are consistent with suppression. No significance test is necessary for this step.
+# 
+# c_bar # if c' is smaller than c but significantly different from 0,the data are consistent with partial mediation. If c' is smaller than c but not significantly different from 0, the data are consistent with complete mediation.
+
+ 
+# med.fit <- lm(apt.c.2 ~ probSol.c.2, data = df )
+# out.fit <- lm( Quali ~ apt.c.2 + probSol.c.2, data = df )
+# med.out <- mediate(med.fit, out.fit, treat = "probSol.c.2", mediator = "apt.c.2",
+                      # robustSE = TRUE, sims = 1000)
+# 
+# # sensitivity analysis:
+# sens.out <- medsens(med.out, rho.by = 0.1, effect.type = "both", sims = 100)
+# summary(sens.out)
+
+
+## create structural plot:
+# data <- c(0, a.txt , 0,
+#           0,0, 0, 
+#           b_bar.txt, c_bar.txt, 0)
+# M2 <- matrix (nrow=3, ncol=3, byrow = TRUE, data=data)
+# library(tikzDevice)
+# pdf("img/structure_diagram.pdf", width = 5, height = 4)
+# plot <- plotmat(M2, pos = c(1,2), name= c( attr( s[[M]], "name" ), attr( s[[X]], "name" ), attr( s[[Y]], "name" ) ),
+#                 box.type = "rect", box.size = 0.15, box.prop=0.5, curve=0 )
+# invisible(dev.off())
+# \begin{figure}
+# \includegraphics[width = .8\textwidth]{img/structure_diagram}
+# %\input{img/structure_diagram}
+# \caption{Structural model for the assumed mediation effect.}
+# \label{structuralModel}
+# \end{figure}
+@
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[>=stealth']
+
+\node[state,
+  text width=3cm,
+  fill=white,
+  anchor = center] (X) {\Sexpr{attr( s[[X]], "name.short" )}};
+
+\node[state,
+  anchor=center,
+  text width=3cm,
+  xshift=3cm,
+  yshift=3cm,
+  fill=white,
+  text width=4cm,
+  anchor = center] (M) {\Sexpr{ attr( s[[M]], "name.short" ) }};
+   
+\node[state,    	
+  text width=3cm, 
+  xshift=6cm,
+  fill=white, 
+  anchor=center] (Y) { \Sexpr{attr( s[[Y]], "name.short" )} };
+
+\path[->] (X) edge node[left,midway] {\Sexpr{a.txt}} (M)
+ (M) edge node[right,midway] {\Sexpr{b_bar.txt}} (Y)
+ (X) edge node[above,midway] {\Sexpr{c_bar.txt}} (Y);
+
+\end{tikzpicture}
+\caption{Structural model for the assumed mediation effect.}
+\label{structuralModel}
+\end{figure}
+
+
+The size of the direct effect $c=\Sexpr{round( c[1], 2 )}$ is equal to the effect calculated from the mediation model $c'=\Sexpr{round( c_bar[1] + a[1]*b_bar[1], 2 )}$. This is not very surprising given the fact that no covariates are included in the model (note that the effects remain when expectancy for success is included in the model) and no missing data is present. \Sexpr{round( a[1]*b_bar[1]/(c_bar[1] + a[1]*b_bar[1]), 2 )*100} percent of the total effect is mediated by problem comprehension.
+
+Further in-depth considerations regarding mediation analyses concern the following points that we each briefly address (Gelfand et al., 2009):
+\begin{itemize}
+\item Reliability of measures: It is key to analyzing a mediation effect that the mediator is measured reliably. In fact, we ascertained that the internal consistency and the retest-reliability are acceptable such that this requirement is met.
+\item The No-omitted-variables assumption holds that all relevant variables have been included in the models. We contend that we cannot be sure whether this holds true in the current case. Theoretically, we submit that the assumed mechanism is plausible, however, research in the competition contexts with the specific requirements for success in the competition are no well established such that we might have missed other variables.
+\item Confirmatory-exploratory distinction: We stress that the mediator analysis in this case is merely an exploration of possible mechanisms that might be at work for successful physics problem solving.
+\item Temporal order: The problem solving measures were simultaneously recorded after the students received the message whether they made it to the next round and highest round was measured after the respective rounds were finished and the students received their scores. Consequently, there might be some motivational aspects give rise to better scores in physics problem solving. These effects cannot be controlled for however.
+\end{itemize}
+
+\end{document}
