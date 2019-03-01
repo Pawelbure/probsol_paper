@@ -1,0 +1,127 @@
+\documentclass[C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/main/main]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+\SweaveOpts{concordance=F, echo = F, results = tex}
+
+<<>>=
+setwd("C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/descriptives/")
+library(tables)
+library(psych)
+library(xtable)
+library(ggplot2)
+library(BasicFunctions)
+library(openxlsx)
+library(rstan)
+
+load("C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/data/clean/data.RData")
+load("C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/codebook/scales.RData")
+codebk <- read.xlsx("C:/Users/sunpn505/Documents/studies/WinnerS/Erhebungen/IPhO1718/codebook/codebook.xlsx")
+
+idx <- d$Code[ !is.na( d$apt.c.2 ) ]
+d <- subset(d,Code%in%idx)
+@
+
+
+<<>>=
+tab <- aggregate( cbind(A=d$QualiR2.1,B=-d$QualiR2.1+2) ~ Geschlecht.1 + Age.1, FUN = sum, data = d )
+names(tab) <- c("Gender","Age","2","1")
+tab$Gender <- ifelse( tab$Gender=="m","Male","Female" ) 
+@
+
+\begin{table}
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+  & & & \multicolumn{2}{c}{Highest round}\\
+		\cmidrule(lr){4-5} 
+<<>>=
+print( xtable( as.matrix( tab ) ), only.contents = T, booktabs = T, sanitize.text.function = function(x) x )
+@
+\end{tabular}
+\end{table}
+
+
+\subsection*{Backgroundvariables}
+
+<<>>=
+pld1 <- data.frame( 
+  stack( d[,c("sob.1","expComp.1","ss.tea.1","ss.par.1","ss.pee.1","achievR1.1","apt.c.2","mcphy.c.2")] ), 
+  Gr1 = d$Geschlecht.1, Gr2 = d$QualiR2.1, Gr3 = d$Age.1 )
+idx <- levels( pld1$ind )
+
+CredInt <- list()
+pAeq <- list()
+
+# for( k in 1:length(idx) ){
+# 
+#   pld.stan <- subset( pld1, subset = pld1$ind==idx[k] )
+#   pld.stan <- na.omit( pld.stan )
+#   stan_dat <- list( N = nrow(pld.stan), Varx = pld.stan$values,
+#                     Gender = ifelse( pld.stan$Gr1=="m", 0, 1 ), Quali = pld.stan$Gr2, Age = pld.stan$Gr3 )
+#   fit <- stan( "stan_model/covariates.stan", data = stan_dat, save_dso=T )
+# 
+#   CredInt[[k]] <- apply( extract( fit )$beta, 2, quantile, probs = c(.025,.975) )
+#   pAeq[[k]] <- apply( extract( fit )$beta>0, 2, mean )
+# 
+# }
+# save.image("stan_model/image1.RData")
+
+r.nms <- codebk$subscale.c[ match( gsub("\\.1|\\.5","",idx ), codebk$subscale ) ]
+r.nms[ which( is.na( r.nms )) ] <- codebk$scale.c[ match( gsub("\\.1|\\.5","",idx ), codebk$scale ) ][ which( is.na( r.nms )) ]
+
+load("stan_model/image1.RData")
+idx2 <- lapply( CredInt, function(x) paste0( "[", apply( round( x[,c(2:5)], 2 ), 2, paste0, collapse = ";" ),
+                                             "]" ) )
+CredInt_tab <- do.call( "rbind", idx2 )
+pAeq_tab <- do.call( "rbind", lapply( pAeq, function(x) round( x[c(2:5)], 2 ) ) )
+tabd <- data.frame( cbind( CredInt_tab, pAeq_tab ) )
+
+row.names(tabd) <- r.nms
+
+MSD <- function(x) { paste0( round( mean(x), 2 ), " (", round( sd(x), 2 ), ")" ) }
+tab.part1 <- aggregate( values ~ ind + Gr1 + Gr2, pld1, MSD )
+
+
+library(reshape2)
+tab.part1 <- dcast(tab.part1, ind ~ Gr2 + Gr1, value.var = "values", drop = FALSE)
+# tab.part1 <- tab.part1[,c(1,4,2,5,3)]
+
+tab <- cbind( tab.part1, tabd )
+write.xlsx(tab, "stan_model/model_fit.xlsx")
+tab <- read.xlsx("stan_model/model_fit.xlsx")
+
+tab$ind <- r.nms
+names(tab) <- c("Variable","$M(SD)_{\\mars}$","$M(SD)_{\\female}$","$M(SD)_{\\mars}$","$M(SD)_{\\female}$",
+                "$\\theta_{\\text{G}}$",
+                "$\\theta_{\\text{R}}$",
+                "$\\theta_{\\text{G $\\times$ R}}$",
+                "$\\theta_{\\text{A}}$",
+                "$Pr_1$\\tnote{a}", "$Pr_2$", "$Pr_3$","$Pr_4$" )
+@
+
+
+\begin{sidewaystable}
+\begin{adjustwidth}{-4.5cm}{-1cm}
+\thisfloatpagestyle{empty}
+\caption{Overview of measures ...}
+\label{InitialDifferences}
+\begin{threeparttable}
+\begin{tabular}{lcccccccccccc}
+\toprule
+& \multicolumn{2}{c}{Round 1} & \multicolumn{2}{c}{Round 2} & \multicolumn{4}{c}{Confidence intervals} & \multicolumn{4}{c}{Percentage} \\
+  \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-9} \cmidrule(lr){10-13}  
+<<>>=
+print( xtable( tab ), only.contents = T, booktabs = T, sanitize.text.function = function(x) x, include.rownames = F )
+@
+\end{tabular}
+\begin{tablenotes}
+  \item[a] $Pr_j$ refers to the probability of certainty with which the respective parameter $j\in{\text{1:Ge,2:Gr,3:Ge$\times$Gr}}$ is greater than zero: $Pr_j:= Pr(\theta_{j}>0)$. For example, if the probability $Pr(\theta_{\text{Ge}})=a>0$, that means that the parameter is $a\cdot 100$ \% greater than zero, referring to the fact that males have a greater value for the respective variable.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth}
+\end{sidewaystable}
+
+
+\end{document}
