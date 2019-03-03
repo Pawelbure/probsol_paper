@@ -1,4 +1,4 @@
-\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/main/TaylorFrancis/interactapasample]{subfiles}
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/probsol_paper/main/TaylorFrancis/interactapasample]{subfiles}
 
 %\usepackage{Sweave}
 
@@ -7,7 +7,15 @@
 
 
 <<>>=
-setwd("D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/")
+where <- "home"
+if( where=="home" ){
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+} else {
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+}
+
+setwd( paste0( dir, "paper/probsol_paper/results/" ) )
+
 library(tables)
 library(psych)
 library(xtable)
@@ -19,9 +27,9 @@ library(rstan)
 library(openxlsx)
 library(VGAM)
 
-load("D:/studies/WinnerS/Erhebungen/IPhO1718/data/clean/data.RData")
-load("D:/studies/WinnerS/Erhebungen/IPhO1718/codebook/scales.RData")
-cb <- read.xlsx( "D:/studies/WinnerS/Erhebungen/IPhO1718/codebook/codebook.xlsx" )
+load( paste0( dir, "/data/clean/data.RData") )
+load( paste0( dir, "/codebook/scales.RData") )
+cb <- read.xlsx( paste0( dir, "/codebook/codebook.xlsx" ) )
 
 # reallocate imputed to normal scale:
 d$apt.c.2 <- d$apt.c.imp.2

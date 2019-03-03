@@ -1,0 +1,182 @@
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/probsol_paper/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+\SweaveOpts{concordance=F, echo = F, results = tex}
+
+<<>>=
+where <- "home"
+if( where=="home" ){
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+} else {
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+}
+setwd( paste0( dir, "paper/probsol_paper/analyses/" ) )
+
+library(tables)
+library(dplyr)
+library(psych)
+library(xtable)
+library(openxlsx)
+library(car)
+library(VGAM)
+library(tikzDevice)
+library(BasicFunctions)
+
+load( paste0( dir, "/data/data.RData") )
+cb <- read.xlsx( paste0( dir, "/codebook/codebook.xlsx" ) )
+
+# necessary variables:
+vars <- c("probSol.c.2","apt.c.2",
+          "kft.c.2",
+          # "achievR1.1",
+          "swk.phy.1","expComp.1","valComp.1","sob.1",
+          "ss.1",
+          "Quali")
+
+varsX <- gsub( "\\.2|\\.1", "", vars)
+add <- ifelse( !substr( vars, nchar(vars)-1, nchar(vars) )%in%c(".1",".2"), "", substr( vars, nchar(vars)-1, nchar(vars) ) )
+
+# only students that have all cognitive measures:
+# df <- subset( d, Code%in%na.omit( d[,c("Code",vars)] )$Code )
+df <- subset( d, Code%in%na.omit( d[,c("Code",vars[c(1)])] )$Code )
+df <- subset( df, df$Quali!=4 )
+
+## load function for instrument table:
+# instr <- function(k) {
+#   paste( unlist( lapply( k, function(i) {
+#     if( attr( s[[varsX[i]]], "type" )%in%c( "interval","mc","ordinal","openEnded" ) ){
+#       A <- attr( s[[varsX[i]]], "name" )
+#       if( attr( s[[varsX[i]]], "type" )%in%c( "interval" ) ){
+#         B <- paste0( "a ", max( attr( s[[varsX[i]]], "response" ) ),"-point Likert scale (",
+#                      attr( s[[varsX[i]]], "response.english" )[1],", ..., ",
+#                      attr( s[[varsX[i]]], "response.english" )[length(attr( s[[varsX[i]]], "response.english" ))], ")" )
+#       }
+#       if( attr( s[[varsX[i]]], "type" )%in%c( "openEnded" ) ){
+#         B <- "an open ended scale"
+#       }
+#       if( attr( s[[varsX[i]]], "type" )%in%c( "mc" ) ){
+#         B <- "a binary scale (0 incorrect, and 1 correct)"
+#       }
+#       if( attr( s[[varsX[i]]], "type" )%in%c( "ordinal" ) ){
+#         B <- "an ordinal scale"
+#       }
+#       Cx <- length( attr( s[[varsX[i]]], "text" ) )
+#       if( !is.na( attr( s[[varsX[i]]], "text" ) )[1] ){
+#         Dx <- paste0( " (e.g., ", sample( attr( s[[varsX[i]]], "text" ), size = 1 ), ")" )
+#       } else {
+#         Dx <- ""
+#       }
+#     }
+#     paste0( " ", A, " is measured with ", B, ". The scale contains ", Cx,
+#           ifelse(Cx>1," items"," item."), Dx, collapse = "" )
+#   })), collapse = "" )
+# }
+@
+
+
+<<>>=
+# scale overview ######
+# df$kft.c.2 <- d$kft.c.imp.2[ match( df$Code, d$Code ) ]
+inspect <- df[ ,vars[vars!="Quali"] ]
+inspect <- stack( data.frame( inspect[,vars[vars!="Quali"]] ) )
+inspect <- cbind( inspect, ind2 = rep( varsX[vars!="Quali"], rep( nrow(inspect)/length(vars[vars!="Quali"]), length(vars[vars!="Quali"])) ))
+
+# ### create cutpoints for 25 and 75%
+# idx <- lapply( cb$response.num[ cb$scale_final%in%varsX[4] ], function(x) strsplit(x, ",")[[1]] )
+# idx <- lapply( cb$response.num[ cb$scale_final%in%varsX[3] ], function(x) strsplit(x, ",")[[1]] )
+# items_list <- idx
+
+# mns <- as.numeric( items_list[[1]] )
+# for( i in 2:length(items_list) ){
+#   mns <- unique( c( mns, apply( expand.grid(mns, as.numeric( items_list[[i]]) ), 1, mean ) ) )
+# }
+  
+# poss_values <- function(items_list = NULL){
+#   idx <- expand.grid( items_list )
+#   idx <- apply( idx, 2, as.numeric )
+#   
+#   return( unique( apply( idx, 1, mean ) ) )
+# }
+
+# # predefine list for probsol values
+# unique_probsol = list( c(seq(-2,8,1)), seq(-2,8,1), seq(0,8,1), seq(0,8,1) )
+# 
+# cutPts <- lapply( s[varsX[vars!="Quali"]], 
+#                   function(x) {
+#                     if( !any( c("Phys. probl. sol. ability","General phys. prob. sol. ability","Cog. abilities")%in%attr(x,"name") ) ){
+#                       return( poss_values(Q = length(x), K = max(attr(x,"response"))) )
+#                     }
+#                     if( attr(x,"name")=="Phys. probl. sol. ability" ) {
+#                       return( poss_values( unique = unique_probsol ) )
+#                     }
+#                     if ( attr(x,"name")=="General phys. prob. sol. ability" ) {
+#                       return( 0:15 )
+#                     }
+#                     if ( attr(x,"name")=="Cog. abilities" ) {
+#                       return( 0:34 )
+#                     }
+#                   } )
+# cutPts <- lapply( cutPts, function(x) quantile( x, probs = c(.25,.75) ) )
+
+# # create percentage output values that are used in the table:
+# quartile <- lapply( varsX[vars!="Quali"], function(x) 
+#   paste0( 
+#     round( c( mean( inspect$values[inspect$ind2==x]<=cutPts[[x]][1], na.rm = T ), mean( inspect$values[inspect$ind2==x]>cutPts[[x]][2], na.rm = T ) )*100 ), collapse = "/" ) )
+# 
+# names(quartile) <- varsX[vars!="Quali"]
+@
+
+
+<<>>=
+x <- 3
+varsXin=varsX; addin=add; varsin = vars
+
+# create N's:
+tab_create <- function(varsXin=varsX, addin=add, varsin = vars) 
+  { sapply( 1:length(addin), function(x) {
+    dat <- df[,paste0( varsXin[x], addin[x] )]
+    dat2 <- df[,paste0( cb$code[ cb$scale_final%in%varsX[x] ], addin[x])]
+    data.frame(
+      Scale = cb$scale.c[ cb$scale_final%in%varsX[x] ][1],
+      N = ifelse( length(ncol(dat))!=0, sum( apply( !is.na( dat ), 1, any ) ), sum( !is.na( dat ) ) ),
+      items = sum( cb$scale_final%in%varsX[x] ),
+      alpha = ifelse( length(ncol(dat2))!=0, 
+                      round( psych::alpha( dat2, check.keys = T )[[1]]$raw_alpha, 2 ), NA ),
+      r.drop = ifelse( length(ncol(dat2))!=0, 
+                       round( mean( psych::alpha( dat2, check.keys = T )[[3]]$r.drop ), 2 ), NA ),
+      scale = cb$response.num[ cb$scale_final%in%varsX[x] ][1],
+      M = round( mean( df[,varsin[x]], na.rm = T ), 2 ),
+      SD = round( sd( df[,varsin[x]], na.rm = T ), 2 ),
+      # Quart = ifelse( varsXin[[x]]%in%names(quartile), quartile[ varsXin[[x]] ], "-" ),
+      stringsAsFactors = F )
+  })}
+tab <- tab_create()
+
+rownames(tab) <- c("Scale","$N$","\\#","$\\alpha$","$\\bar{r}_{i(t-i)}$","Scale","$M$","$SD$")
+tab <- cbind( tab[,1:3], c("\\midrule \\textit{Affective/motivational variables:}",rep("",nrow(tab)-1) ), tab[,4:ncol(tab)] )
+tab <- cbind( c("\\textit{Cognitive variables:}",rep("",nrow(tab)-1) ), tab )
+tab <- cbind( tab[,1:(ncol(tab)-1)], c("\\midrule \\textit{Success criterium:}",rep("",nrow(tab)-1) ), tab[,(ncol(tab)):ncol(tab)] )
+@
+
+
+\begin{table}
+\centering
+\caption{Overview of utilized variables.}
+\label{Tab1}
+\begin{threeparttable}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+<<>>=
+print( xtable( base::t( tab ) ), booktabs = T, sanitize.text.function = function(x) x, include.rownames = F, only.contents = T )
+@
+\end{tabular}
+\begin{tablenotes}
+\item[a] $N$ ... Number of student responses with at least one valid value, $\alpha$ ... internal consistency and $\bar{r}_{i(t-i)}$ ... mean discriminatory power of items.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\end{document}
