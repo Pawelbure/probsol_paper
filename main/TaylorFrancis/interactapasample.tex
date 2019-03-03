@@ -3,6 +3,8 @@
 
 \documentclass[]{interact}
 
+\usepackage{t1enc}
+\usepackage[utf8]{inputenc}
 \usepackage{epstopdf}% To incorporate .eps illustrations using PDFLaTeX, etc.
 \usepackage[caption=false]{subfig}% Support for small, `sub' figures and tables
 %\usepackage[nolists,tablesfirst]{endfloat}% To `separate' figures and tables from text if required
@@ -35,11 +37,6 @@
 % ##################
 % Tikz 
 
-\usepackage{pgfplots}
-\pgfmathdeclarefunction{gauss}{2}{%
-  \pgfmathparse{1/(#2*sqrt(2*pi))*exp(-((x-#1)^2)/(2*#2^2))}%
-}
-
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{decorations.pathmorphing,patterns,positioning,calc,intersections,through,backgrounds,arrows,automata,shadings,decorations.pathreplacing}
@@ -64,7 +61,7 @@
 
 %\articletype{ARTICLE TEMPLATE}% Specify the article type or omit as appropriate
 
-\title{Physics expertise in light of cognitive and affective variables -- Evidence from the PhysicsOlympiad}
+\title{Chracterizing successful participants in ScienceOlympiads -- Evidence from the PhysicsOlympiad}
 
 \author{
 \name{Peter Wulff\textsuperscript{a}\thanks{CONTACT Peter Wulff. Email: peter.wulff@uni-potsdam.de}, Stefan Petersen\textsuperscript{b}, Tim H\"o{}ffler\textsuperscript{b}, and Knut Neumann\textsuperscript{b}}
@@ -83,9 +80,24 @@ Problem solving, Physics competitions
 
 \maketitle
 
-%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/intro/intro}
+\section{Introduction}
 
-%\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/theory/theory}
+Enrichment programs such as the ScienceOlympiads are means to identify and promote talented students in science, technology, engineering, and math (STEM). These programs proceed in subsequential stages where students solve increasingly complex domain-specific problem and eventually meet and compete with one each other \citep{Petersen.2017}. Amongst the most successful students, a national team is chosen, comprising about five students, who compete on an international level against students from more than 80 countries in the Physics Olympiad. Federal government and the STEM community endorse these means as viable instruments to foster talented students \citep{KMK.2009,Petersen.2017}--and educational researchers in gifted programs motivated the necessity of ScienceOlympiads (and programs alike) as a viable complementary to regular schools that have limited capacities to provide resources for talented students \citep{Reis.2010}. Besides these goals, research is scare on these programs \citep{Ziegler.2004}.
+
+The available studies document that successful candidates report a positive impact on their future job aspirations in STEM through programs such as the ScienceOlympiads \citep{Feng.2001,Oswald.2004,Subotnik.1993}. Further research suggests that these programs can have effects for training skills related to cognitive abilities and related to beliefs such as developing interest and motivation of students towards STEM \citep{Oswald.2004,Aljughaiman.2012,Wai.2010,Marsh.1995}. Due to the broad motivation of enrichment programs (foster gifted students) and the self-selective mechanisms for participation, other studies sought to characterize participants in these programs in order to advance an understanding for characteristics of successful participants. \cite{Urhahne.2012} found for the ChemistryOlympiad that previous participation was the best predictor for success in this competition and also expectancy of success distinguished successful participants from less successful participants \citep[similar findings in:][]{Stang.2014}. Taken together, the above studies suggest that successful students in programs such as the ScienceOlympiads show advantageous dispositions in cognitive variables such as general cognitive abilities, and that more successful students display advantageous beliefs such as a high expectancy of success towards the competition.
+
+However, two problems arise in the context of the above studies. First, even though cognitive abilities appear to be particularly predictive for success in these programs, operationalization of domain specific abilities is insufficient so that it remains unclear to what extent domain-specific cognitive abilities are characteristic of successful participants in these programs. Second, no such analyses have been done for the Physics Olympiad. Physics is often suggested to be particularly heavy in content dependency such that characterizing successful participants in the Physics Olympiad might hinge on an integrative assessment of both cognitive variables and beliefs.
+
+
+\section{Modelling success in ScienceOlympiads}
+
+Applied to the context of the Science Olympiads, \cite{Urhahne.2012} applied the expectancy-value model of achievement motivation in order to explain variance in success for the participants. The expetcancy-value model outlines two proximal causes for achievement related choices and performance in a situation: expectancy to be successful in a task (''Can I do this?'') and the values brought towards performing the relevant tasks (''Do I want to do this?'') \citep{Eccles.1983}. The model has been empirically validated in multiple contexts such as occupational choices REF, academic choices in school \citep{Koller.2000} and ScienceOlympiads \citep{Urhahne.2012}. 
+
+Expectancy of success and values towards the context (e.g., ScienceOlympiad) are also influenced by other multiple variables that commonly in talent research relate to cognitive dispositions (stable and vairable), affective/motivational variables, and external motivational moderators \citep[e.g.,][]{Ziegler.2009,Heller.2002}. Regarding cognitive dispositions, it has been implicated from the inception of talent studies that general cognitive abilities successful from less successful students--talent was even defined through scores in general cognitive abilities \citep{Rost.2010}. Later on, incited by studies in domains such as chess and physics, researchers acknowledged that domain-specific skills such as problem solving are the characteristic features that distinguish successful from less successful students in a domain \citep{Chi.1981}. Today, it is clear that successful students in a domain invest enormous amounts of deliberate practice to master a domain \citep{Simon.1983}. Consequently, domain-specific abilities are essential for characterizing successful students in programs such as the ScienceOlympiads. 
+
+Affective and motivational variables can be characterized to be beliefs about oneself that potentially impact goal-directed behavior in that domain \citep{Rheinberg.2012}. There is contentious debate, what essential affective and motivational aspects direct human behavior, but competence, belongingness, and interest are conceptualized in most models \cite{Deci.2000,Hazari.2010}. \cite{Bandura.1997} presented a broad program outlining the importance of self-efficacy beliefs (closely linked to competence) and educational outcomes such as positive attitudes towards performance. Regarding belongingness, \cite{Baumeister.1995} muster evidence that humans perform better when they feel accepted and related to people in the respective community. \cite{Good.2012} link the sense of belonging for students to academic choices in mathematics. Finally, domain interest is linked to positive learning outcomes and academic choices in the domain \cite{Krapp.2002,Hazari.2010}. External motivational moderators can be conceived of as social support by meaningful others. For example, the attitudes of peers, teachers, and parents are an important facilitator for achievement in an academic competition \cite[e.g.,][]{Urhahne.2012}.
+
+
 
 %\subfile{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/method/method}
 
@@ -108,7 +120,7 @@ We are not aware of potential conflicts of interest that relate to the results r
 \newpage
 
 \bibliographystyle{apacite}
-\bibliography{C:/Users/Peter/Documents/bibliography/bib}
+\bibliography{../../bibliography/bib}
 
 
 \newpage
