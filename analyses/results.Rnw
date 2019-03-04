@@ -7,11 +7,11 @@
 
 
 <<>>=
-where <- "home"
+where <- "work"
 if( where=="home" ){
   dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
 } else {
-  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+  dir <- "C:/Users/Peter/Desktop/winners/IPhO1718/"
 }
 
 setwd( paste0( dir, "paper/probsol_paper/results/" ) )
@@ -165,8 +165,8 @@ tab4 <- tab4[-c(1:max(grep("Intercept",rownames(tab4)))),]
 
 # make nice row names:
 row.names(tab4) <- substitute.names( row.names(tab4), substitute_codes = 
-                                       data.frame( code = c( cb$scale, "kft.c.imp","Geschlechtw"), 
-                                                   name = c(cb$scale.c.short, "Cog. abilities","Gender (f)" ) ), 
+                                 data.frame( code = c( cb$scale, "kft.c.imp","Geschlechtw"), 
+                                             name = c(cb$scale.c.short, "Cog. abilities","Gender (f)" ) ), 
                                      delete = c(".1",".2"), codebk.there = F )
 
 #R^2 Nagelkerke

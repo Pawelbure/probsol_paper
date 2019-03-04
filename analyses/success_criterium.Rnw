@@ -1,0 +1,36 @@
+\documentclass[C:/Users/Peter/Desktop/winners/IPhO1718/paper/probsol_paper/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+\SweaveOpts{concordance=F, echo = F, results = tex}
+
+<<>>=
+where <- "work"
+if( where=="home" ){
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+} else {
+  dir <- "C:/Users/Peter/Desktop/winners/IPhO1718/"
+}
+setwd( paste0( dir, "paper/probsol_paper/analyses/" ) )
+
+library(tables)
+library(dplyr)
+library(psych)
+library(xtable)
+library(openxlsx)
+library(car)
+library(VGAM)
+library(tikzDevice)
+library(BasicFunctions)
+
+load( paste0( dir, "/data/data.RData") )
+
+pct <- round( table( d$Quali[ !is.na( d$probSol.c.2 ) ] )/table( d$Quali )*100 )
+numb1 <- paste0( "stage ", 1:4, ": ", table( d$Quali[ !is.na( d$probSol.c.2 ) ] ), " (", pct, "\\\\%)", collapse = ", " )
+@
+
+Success criterium was highest achieved round of the participants in the PhysicsOlympiad (see Figure \ref{Design}). The number of students in the different stages was as follows: \Sexpr{numb1}. In brackets are the percentage of students in this analysis from the overall sample that took part in the online questionnaire. Particularly in stage 3, a large perentage of students participated also in the problem solving task. Due to the small overall number of students, this could be a mere coincidene.
+
+
+\end{document}
