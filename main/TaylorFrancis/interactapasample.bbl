@@ -301,36 +301,6 @@ Fortus, D.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Funke%
-\ \BBA {} Frensch%
-}{%
-Funke%
-\ \BBA {} Frensch%
-}{%
-{\protect \APACyear {2007}}%
-}]{%
-Funke.2007}
-\APACinsertmetastar {%
-Funke.2007}%
-\begin{APACrefauthors}%
-Funke, J.%
-\BCBT {}\ \BBA {} Frensch, P\BPBI A.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2007}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Complex problem solving} {Complex problem
-  solving}.{\BBCQ}
-\newblock
-\BIn{} D\BPBI H.~Jonassen\ (\BED), \APACrefbtitle {Learning to solve complex
-  scientific problems} {Learning to solve complex scientific problems}\ (\BPGS\
-  25--47).
-\newblock
-\APACaddressPublisher{New York}{Erlbaum}.
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
 Glaser%
 }{%
 Glaser%
@@ -477,6 +447,57 @@ Heller, K\BPBI A.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Heller%
+\ \BBA {} Perleth%
+}{%
+Heller%
+\ \BBA {} Perleth%
+}{%
+{\protect \APACyear {2007}}%
+}]{%
+Heller.2007}
+\APACinsertmetastar {%
+Heller.2007}%
+\begin{APACrefauthors}%
+Heller, K\BPBI A.%
+\BCBT {}\ \BBA {} Perleth, C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2007}.
+\newblock
+\APACrefbtitle {MHBT-S: M{\"u}nchner Hochbegabungstestbatterie f{\"u}r die
+  Sekundarstufe} {Mhbt-s: M{\"u}nchner hochbegabungstestbatterie f{\"u}r die
+  sekundarstufe}.
+\newblock
+\APACaddressPublisher{G{\"o}ttingen and Bern and Wien}{Hogrefe}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Hoffmann%
+}{%
+Hoffmann%
+}{%
+{\protect \APACyear {2002}}%
+}]{%
+Hoffmann.2002}
+\APACinsertmetastar {%
+Hoffmann.2002}%
+\begin{APACrefauthors}%
+Hoffmann, L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2002}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Promoting girls' interest and achievement in physics
+  classes for beginners} {Promoting girls' interest and achievement in physics
+  classes for beginners}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Learning and Instruction}{12}{}{447--465}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 KMK%
 }{%
 KMK%
@@ -581,32 +602,6 @@ Larkin, J\BPBI H.%
   problems} {Expert and novice performance in solving physics problems}.{\BBCQ}
 \newblock
 \APACjournalVolNumPages{Science}{208}{}{1335--1342}.
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
-Larkin%
-\ \BBA {} Simon%
-}{%
-Larkin%
-\ \BBA {} Simon%
-}{%
-{\protect \APACyear {1987}}%
-}]{%
-Larkin.1987}
-\APACinsertmetastar {%
-Larkin.1987}%
-\begin{APACrefauthors}%
-Larkin, J\BPBI H.%
-\BCBT {}\ \BBA {} Simon, H\BPBI A.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{1987}{}{}.
-\newblock
-{\BBOQ}\APACrefatitle {Why a Diagmm is (Sometimes) Worth Ten Thousand Words}
-  {Why a diagmm is (sometimes) worth ten thousand words}.{\BBCQ}
-\newblock
-\APACjournalVolNumPages{Cognitive Science}{11}{}{65--99}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -724,6 +719,31 @@ Marsh, H\BPBI W.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Mayer%
+}{%
+Mayer%
+}{%
+{\protect \APACyear {2013}}%
+}]{%
+Mayer.2013}
+\APACinsertmetastar {%
+Mayer.2013}%
+\begin{APACrefauthors}%
+Mayer, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2013}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Problem Solving} {Problem solving}.{\BBCQ}
+\newblock
+\BIn{} D.~Reisberg\ (\BED), \APACrefbtitle {The Oxford Handbook of Cognitive
+  Psychology} {The oxford handbook of cognitive psychology}\ (\BPGS\ 769--778).
+\newblock
+\APACaddressPublisher{Oxford and New York}{{Oxford University Press}}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Oswald%
 , Hanisch%
 \BCBL {}\ \BBA {} Hager%
@@ -782,6 +802,28 @@ Petersen, S.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Polya%
+}{%
+Polya%
+}{%
+{\protect \APACyear {1945}}%
+}]{%
+Polya.1945}
+\APACinsertmetastar {%
+Polya.1945}%
+\begin{APACrefauthors}%
+Polya, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{1945}.
+\newblock
+\APACrefbtitle {How to solve it} {How to solve it}.
+\newblock
+\APACaddressPublisher{New York}{{Princeton University Press}}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Reif%
 \ \BBA {} Allen%
 }{%
@@ -809,6 +851,34 @@ Reif, F.%
 \newblock
 \begin{APACrefDOI} \doi{10.1207/s1532690xci0901{\textunderscore }1}
   \end{APACrefDOI}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Reinhold%
+, Lind%
+\BCBL {}\ \BBA {} Friege%
+}{%
+Reinhold%
+\ \protect \BOthers {.}}{%
+{\protect \APACyear {1999}}%
+}]{%
+Reinhold.1999}
+\APACinsertmetastar {%
+Reinhold.1999}%
+\begin{APACrefauthors}%
+Reinhold, P.%
+, Lind, G.%
+\BCBL {}\ \BBA {} Friege, G.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1999}{}{}.
+\newblock
+{\BBOQ}\APACrefatitle {Wissenszentriertes Probleml{\"o}sen in Physik}
+  {Wissenszentriertes probleml{\"o}sen in physik}.{\BBCQ}
+\newblock
+\APACjournalVolNumPages{Zeitschrift f{\"u}r Didaktik der
+  Naturwissenschaften}{5}{1}{41--62}.
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%

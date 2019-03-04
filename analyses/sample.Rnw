@@ -1,0 +1,57 @@
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/probsol_paper/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+\SweaveOpts{concordance=F, echo = F, results = tex}
+
+<<>>=
+where <- "home"
+if( where=="home" ){
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+} else {
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+}
+setwd( paste0( dir, "paper/probsol_paper/analyses/" ) )
+
+library(psych)
+library(xtable)
+library(openxlsx)
+library(car)
+library(BasicFunctions)
+
+load( paste0( dir, "/data/data.RData") )
+cb <- read.xlsx( paste0( dir, "/codebook/codebook.xlsx" ) )
+
+# necessary variables:
+vars <- c("probSol.c.2","apt.c.2",
+          "kft.c.2",
+          # "achievR1.1",
+          "swk.phy.1","expComp.1","valComp.1","sob.1",
+          "ss.1",
+          "Quali")
+
+varsX <- gsub( "\\.2|\\.1", "", vars)
+add <- ifelse( !substr( vars, nchar(vars)-1, nchar(vars) )%in%c(".1",".2"), "", substr( vars, nchar(vars)-1, nchar(vars) ) )
+
+# only students that have all cognitive measures:
+# df <- subset( d, Code%in%na.omit( d[,c("Code",vars)] )$Code )
+df <- subset( d, Code%in%na.omit( d[,c("Code",vars[c(1)])] )$Code )
+
+
+dd <- rbind( data.frame( df[,c( "Geschl.1","Alter.1",vars[ !vars%in%c("probSol.c.2","apt.c.2","kft.c.2")])], Group = "Treat" ), 
+             data.frame( d[,c( "Geschl.1","Alter.1",vars[ !vars%in%c("probSol.c.2","apt.c.2","kft.c.2")])], Group = "Control" ) )
+dd[,  vars[ !vars%in%c("probSol.c.2","apt.c.2","kft.c.2","Quali")] ] <- apply( dd[,  vars[ !vars%in%c("probSol.c.2","apt.c.2","kft.c.2","Quali")] ], 2, scale )
+form1 <- paste0( "Group ~ ", paste0( vars[ !vars%in%c("probSol.c.2","apt.c.2","kft.c.2")], collapse = " + "), " + Geschl.1 + Alter.1")
+fit <- coefficients( summary( glm( as.formula(form1), family = binomial(link="logit"), data = dd ) ) )
+ins <- paste0( unlist( lapply( 2:nrow(fit), function(x) {
+  paste0( cb$scale.c[ match( substr( row.names(fit)[x], 1, nchar( row.names(fit)[x] )-2 ), cb$scale ) ], ": ", 
+        paste0( "$\\\\beta=", round( fit[x,1], 2 ), ", SE(\\\\beta)=", round( fit[x,2], 2 ), 
+        ", z=", round( fit[x,3], 2 ), ", p=", give.star(fit[x,4], modus = "semi.text", tex = F), "$" ) ) } ) ), collapse = "; " )
+ins <- gsub("NA","Qualified round: ", ins )
+@
+
+The sample comprises students who participated in the online questionnaire and also submitted answers to the physics problem solving abilities items. \Sexpr{nrow(df)} (m=\Sexpr{sum( df$Geschlecht.1=="m" )}, f=\Sexpr{sum( df$Geschlecht.1=="w" )}) students responded to these items. Mean (SD) age for the participants was \Sexpr{round( mean( df$Alter.1 ), 1 )} (\Sexpr{round( sd( df$Alter.1 ), 1 )}). In order to rule out potential selection biases with regards to the entire population of participants in the online questionnaire, background variables (gender and age) and affective/motivational variables were used to predict group membership through a logistic regression with group as outcome variable. Significant coefficients for a predictor variable would suggest that a certain predictor distinguishes the two groups. No effect became significant (\Sexpr{ins}).
+
+
+\end{document}

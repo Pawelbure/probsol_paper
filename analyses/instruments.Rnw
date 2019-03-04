@@ -41,7 +41,7 @@ add <- ifelse( !substr( vars, nchar(vars)-1, nchar(vars) )%in%c(".1",".2"), "", 
 # only students that have all cognitive measures:
 # df <- subset( d, Code%in%na.omit( d[,c("Code",vars)] )$Code )
 df <- subset( d, Code%in%na.omit( d[,c("Code",vars[c(1)])] )$Code )
-df <- subset( df, df$Quali!=4 )
+# df <- subset( df, df$Quali!=4 )
 
 ## load function for instrument table:
 # instr <- function(k) {

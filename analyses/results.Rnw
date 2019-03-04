@@ -7,11 +7,11 @@
 
 
 <<>>=
-where <- "work"
+where <- "home"
 if( where=="home" ){
   dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
 } else {
-  dir <- "C:/Users/Peter/Desktop/winners/IPhO1718/"
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
 }
 
 setwd( paste0( dir, "paper/probsol_paper/results/" ) )
@@ -60,25 +60,21 @@ df <- subset( d, Code%in%na.omit( d[,c("Code",vars[c(1)])] )$Code )
 df <- subset( df, df$Quali!=4 )
 @
 
-
-
-\section{Results}
 <<>>=
-ctab <- corrTab(vars = vars, data = df, real.names = unlist( lapply( varsX, function(x) attr( s[[x]], "name" ) ) ), with.means = F )
+# ctab <- corrTab(vars = vars, data = df, real.names = unlist( lapply( varsX, function(x) attr( s[[x]], "name" ) ) ), with.means = F )
 @
 
+Since the affective/motivational variables are self-reported measures and the cognitive variables are expected to be positively related (see positive manifold above), it is necessary to investigate the correlations among the variables first in order to verify that no multi-collinearity is present. Intercorrelations have values in the range between $\Sexpr{paste0( round( range( cor( df[,vars], use = "pairwise.complete.obs" )[ upper.tri( cor( df[,vars], use = "pairwise.complete.obs" ) ) ] ), 2 ), collapse = "-" )}$. Mean (SD) correlation is \Sexpr{round( mean( cor( df[,vars], use = "pairwise.complete.obs" )[ upper.tri( cor( df[,vars], use = "pairwise.complete.obs" ) ) ] ), 2 )} (\Sexpr{round( sd( cor( df[,vars], use = "pairwise.complete.obs" )[ upper.tri( cor( df[,vars], use = "pairwise.complete.obs" ) ) ] ), 2 )}). However, most values are lower such that no multicollinearity is present. One pattern in the correlation matrix is that the cognitive variables correlate significantly amongst each other and the affective/motivational variables correlate significantly amongst each other in positive directions. Social support shows almost no significant correlation with another variable. Interestingly, self-efficacy in physics is not correlated with cognitive variables, which is quiet counter-intuitive given the literature on self-efficacy (see: Bandura, 1997). Expectancy of success in the competition, however, is significantly correlated with the cognitive variables, possibly because it is more context-specific such that students can better judge their actual ability.
 
-Since the motivational variables are self-reported measures and the cognitive variables likely tap similar cognitive abilities, it is necessary to investigate the correlations among the variables first in order to verify that no multi-collinearity is present. The correlations (Table \ref{correlation_table}) show values in the range between $\Sexpr{paste0( round( range( cor( df[,vars], use = "pairwise.complete.obs" )[ upper.tri( cor( df[,vars], use = "pairwise.complete.obs" ) ) ] ), 2 ), collapse = "-" )}$. However, most values are lower such that no multicollinearity is present. One pattern in the correlation matrix is that the cognitive variables correlate significantly amongst each other and the motivational variables correlate significantly amongst each other in positive directions. Social support shows almost no significant correlation with another variable. Interestingly, self-efficacy in physics is not correlated with cognitive variables, which is quiet counter-intuitive given the literature on self-efficacy (see: Bandura, 1997). Expectancy of success in the competition, however, is significantly correlated with the cognitive variables, possibly because it is more context-specific such that students can better judge their actual ability.
-
-\begin{sidewaystable}
-\caption{Correlations among measured variables.}
-\label{correlation_table}
-<<>>=
-print( xtable( ctab, align = paste0( c("ll",rep("c",ncol(ctab)-1)), collapse = "" ) ),
-             booktabs = T, sanitize.text.function = function(x) x, include.rownames = F, floating = F )
-
-@
-\end{sidewaystable}
+% \begin{sidewaystable}
+% \caption{Correlations among measured variables.}
+% \label{correlation_table}
+% <<>>=
+% print( xtable( ctab, align = paste0( c("ll",rep("c",ncol(ctab)-1)), collapse = "" ) ),
+%              booktabs = T, sanitize.text.function = function(x) x, include.rownames = F, floating = F )
+% 
+% @
+% \end{sidewaystable}
 
 
 
@@ -128,7 +124,9 @@ R2.nagel <- as.vector((1 - exp((2/N) * (p0.ll - pFull.ll)))/(1 - exp(p0.ll)^(2/N
 tab2 <- data.frame( coefficients( summary(fitA) ), check.names = F )
 tab2$OR <- exp( tab2[,1] )
 tab2 <- round( tab2, 2 )
-row.names(tab2)[ match( c("apt.c.2","probSol.c.2"), row.names(tab2) ) ] <- substitute.names( row.names(tab2)[ match( c("apt.c.2","probSol.c.2"), row.names(tab2) ) ], substitute_codes = data.frame( code = c( cb$scale, "kft.c.imp.2"), name = c(cb$scale.c.short, "Cog. abilities" ) ), delete = c(".1",".2"), codebk.there = F )
+
+nms <- cb$scale.c[ match( substr( row.names(tab2), 1, nchar( row.names(tab2) )-2 ), cb$scale_final ) ]
+row.names(tab2)[ !is.na(nms)] <- nms[!is.na(nms)]
 row.names(tab2) <- paste0( row.names(tab2), " " )
 tab3 <- matrix( "", ncol = 5, nrow = 2 )
 row.names(tab3) <- c("","$R^2_{\\text{adj}}$")
@@ -164,10 +162,8 @@ tab4 <- round( tab4, 2 )
 tab4 <- tab4[-c(1:max(grep("Intercept",rownames(tab4)))),]
 
 # make nice row names:
-row.names(tab4) <- substitute.names( row.names(tab4), substitute_codes = 
-                                 data.frame( code = c( cb$scale, "kft.c.imp","Geschlechtw"), 
-                                             name = c(cb$scale.c.short, "Cog. abilities","Gender (f)" ) ), 
-                                     delete = c(".1",".2"), codebk.there = F )
+nms <- cb$scale.c[ match( substr( row.names(tab4), 1, nchar( row.names(tab4) )-2 ), cb$scale_final ) ]
+row.names(tab4)[ !is.na(nms)] <- nms[!is.na(nms)]
 
 #R^2 Nagelkerke
 pFull.ll.2 <- logLik(fitC)
@@ -191,14 +187,13 @@ row.names( tab2 )[6] <- paste0( "\\midrule ", row.names( tab2 )[6])
 row.names( tab2 )[c(nrow(tab2)-1,nrow(tab2))] <- gsub( "1"," ",row.names( tab2 )[c(nrow(tab2)-1,nrow(tab2))] )
 @
 
-In order to characterize successful particupants (RQ 1), generalized linear models that account for the ordinal metric of the dependent variable are utilized. Cognitive and motivational variables are included as predictors for highest qualified round (dependent variable). Achievement in round 1 in the physics Olympiad was omitted as a cognitive variable because of the high correlation with the other cognitive measures that were of more interest to us. Proportional odds models were used in order to predict success in the Physics Olympiad in a hierarchical regression procedure (Field, 2012). First, cognitive variables were included as predictors in the model because these predictors can be considered most important for characterizing successful students in the Physics Olympiad based on prior research. In a second step, cognitive variables and motivational variables were jointly entered in the model.
+In order to characterize successful participants (RQ 1), generalized linear models that account for the ordinal metric of the dependent variable are utilized. Cognitive and affective/motivational variables are included as predictors for highest qualified round (dependent variable). Achievement in round 1 in the physics Olympiad was omitted as a cognitive variable because of the high correlation with the other cognitive measures that were of more interest to us. Proportional odds models were used in order to predict success in the Physics Olympiad in a hierarchical regression procedure (Field, 2012). First, cognitive variables were included as predictors in the model because these predictors can be considered most important for characterizing successful students in the Physics Olympiad based on prior research (e.g., Urhahne et al., 2012). In a second step, cognitive variables and affective/motivational variables were jointly entered in the model. Ordinal regression models furthermore assume parallel slopes (B\"u{}rkner \& Vuorre, 2018), \Sexpr{paste0( "$\\\\chi^2=", round( parallel.slopes@Body$Chisq[2], 2 ), ", p=", gsub( "\\$", "", give.star( parallel.slopes@Body$`Pr(>Chisq)`[2], modus = "semi.text" ) ), "$" )}. 
 
-Generalized linear models, as any mathematical model, come with certain assumptions that need be tested prior to conducting the analysis. The modelling assumption of parallel slopes holds in our case, \Sexpr{paste0( "$\\\\chi^2=", round( parallel.slopes@Body$Chisq[2], 2 ), ", p=", gsub( "\\$", "", give.star( parallel.slopes@Body$`Pr(>Chisq)`[2], modus = "semi.text" ) ), "$" )}. 
-
-The interesting parameters in the model are the effects (not the intercepts). The effects can be interpreted in accordance with the regression parameters in linear regression (B\"u{}rkner \& Vuorre, 2018). Table \ref{propOddModel} shows the results from the analysis. As can be expected, physics problem conceptualization and generic physics problem solving are significantly positively related with highest qualified round of the participants. The relationship holds when entering the motivational variables to the model. When all variables are included in the model, expectancy of success in the competition shows a significant positive relationship with highest qualified round as well. No other effects become significant and thus characterize successful students in this study. Physics problem conceptualization has the highest odds ratio, and thus a change in physics problem conceptualization of one standard deviation has the highest contribution to the likelihood of a student to reach a higher round. In order to graphically represent this relationship, Figure \ref{problem_concept_skills} depicts highest round over physics problem conceptualization skills.
+The interesting parameters in the model are the effects (not the intercepts). The effects can be interpreted in accordance with the regression parameters in linear regression (B\"u{}rkner \& Vuorre, 2018). Table \ref{propOddModel} shows the results from the analysis. As can be expected, phys. problem solving ability and generic physics problem solving are significantly positively related with highest qualified round of the participants. The relationship holds when entering the affective/motivational variables to the model. When all variables are included in the model, expectancy of success in the competition shows a significant positive relationship with highest qualified round as well. No other effects become significant and thus characterize successful students in this study. Phys. problem solving ability has the highest odds ratio, and thus a change in phys. problem solving ability of one standard deviation has the highest contribution to the likelihood of a student to reach a higher round.
 
 
 \begin{table}
+\centering
 \caption{Proportional odds model for predicting highest qualified round in the physics Olympiad with various predictors.}
 \label{propOddModel}
 <<>>=
@@ -215,12 +210,12 @@ print( xtable( tab2, align = paste0( c("ll",rep("c",ncol(tab2)-1)), collapse = "
 # invisible( dev.off() )
 @
 
-\begin{figure}
-\centering
-% \includegraphics[width=.7\textwidth]{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
-\input{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/img/boxplot}
-\caption{Problem conceptualization scores over highest achieved round of participant.}
-\label{problem_concept_skills}
-\end{figure}
+% \begin{figure}
+% \centering
+% % \includegraphics[width=.7\textwidth]{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+% \input{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/img/boxplot}
+% \caption{Problem conceptualization scores over highest achieved round of participant.}
+% \label{problem_concept_skills}
+% \end{figure}
 
 \end{document}

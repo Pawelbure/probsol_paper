@@ -1,0 +1,70 @@
+\documentclass[D:/studies/WinnerS/Erhebungen/IPhO1718/paper/probsol_paper/main/TaylorFrancis/interactapasample]{subfiles}
+
+%\usepackage{Sweave}
+
+\begin{document}
+
+
+
+
+
+Since the affective/motivational variables are self-reported measures and the cognitive variables are expected to be positively related (see positive manifold above), it is necessary to investigate the correlations among the variables first in order to verify that no multi-collinearity is present. Intercorrelations have values in the range between $-0.18-0.42$. Mean (SD) correlation is 0.13 (0.15). However, most values are lower such that no multicollinearity is present. One pattern in the correlation matrix is that the cognitive variables correlate significantly amongst each other and the affective/motivational variables correlate significantly amongst each other in positive directions. Social support shows almost no significant correlation with another variable. Interestingly, self-efficacy in physics is not correlated with cognitive variables, which is quiet counter-intuitive given the literature on self-efficacy (see: Bandura, 1997). Expectancy of success in the competition, however, is significantly correlated with the cognitive variables, possibly because it is more context-specific such that students can better judge their actual ability.
+
+% \begin{sidewaystable}
+% \caption{Correlations among measured variables.}
+% \label{correlation_table}
+% <<>>=
+% print( xtable( ctab, align = paste0( c("ll",rep("c",ncol(ctab)-1)), collapse = "" ) ),
+%              booktabs = T, sanitize.text.function = function(x) x, include.rownames = F, floating = F )
+% 
+% @
+% \end{sidewaystable}
+
+
+
+
+In order to characterize successful participants (RQ 1), generalized linear models that account for the ordinal metric of the dependent variable are utilized. Cognitive and affective/motivational variables are included as predictors for highest qualified round (dependent variable). Achievement in round 1 in the physics Olympiad was omitted as a cognitive variable because of the high correlation with the other cognitive measures that were of more interest to us. Proportional odds models were used in order to predict success in the Physics Olympiad in a hierarchical regression procedure (Field, 2012). First, cognitive variables were included as predictors in the model because these predictors can be considered most important for characterizing successful students in the Physics Olympiad based on prior research (e.g., Urhahne et al., 2012). In a second step, cognitive variables and affective/motivational variables were jointly entered in the model. Ordinal regression models furthermore assume parallel slopes (B\"u{}rkner \& Vuorre, 2018), $\chi^2=2.53, p=.47$. 
+
+The interesting parameters in the model are the effects (not the intercepts). The effects can be interpreted in accordance with the regression parameters in linear regression (B\"u{}rkner \& Vuorre, 2018). Table \ref{propOddModel} shows the results from the analysis. As can be expected, phys. problem solving ability and generic physics problem solving are significantly positively related with highest qualified round of the participants. The relationship holds when entering the affective/motivational variables to the model. When all variables are included in the model, expectancy of success in the competition shows a significant positive relationship with highest qualified round as well. No other effects become significant and thus characterize successful students in this study. Phys. problem solving ability has the highest odds ratio, and thus a change in phys. problem solving ability of one standard deviation has the highest contribution to the likelihood of a student to reach a higher round.
+
+
+\begin{table}
+\centering
+\caption{Proportional odds model for predicting highest qualified round in the physics Olympiad with various predictors.}
+\label{propOddModel}
+% latex table generated in R 3.4.3 by xtable 1.8-2 package
+% Mon Mar 04 19:14:52 2019
+\begin{tabular}{llcccc}
+  \toprule
+ & $\beta$ & $SE(\beta)$ & $z$ & $p$ & $OR$ \\ 
+  \midrule
+Phys. probl. sol. ability  & 0.71 & 0.2 & 3.62 & $<.001$ & 2.04 \\ 
+  General phys. prob. sol. ability  & 0.37 & 0.18 & 2.05 & $<.05$ & 1.45 \\ 
+  Gen. cog. abilities  & 0.22 & 0.19 & 1.15 & $.25$ & 1.24 \\ 
+   &  &  &  &  &  \\ 
+  $R^2_{\text{adj}}$ & 0.23 &  &  &  &  \\ 
+  \midrule Phys. probl. sol. ability & 0.7 & 0.22 & 3.24 & $<.001$ & 2.01 \\ 
+  General phys. prob. sol. ability & 0.37 & 0.19 & 1.93 & $<.05$ & 1.45 \\ 
+  Gen. cog. abilities & 0.14 & 0.19 & 0.73 & $.47$ & 1.15 \\ 
+  Self-efficacy physics & 0.08 & 0.21 & 0.36 & $.72$ & 1.08 \\ 
+  Expectancy physics competition & 0.57 & 0.22 & 2.64 & $<.01$ & 1.77 \\ 
+  Value physics competition & 0.12 & 0.19 & 0.6 & $.55$ & 1.12 \\ 
+  Sense of belonging & -0.33 & 0.21 & -1.59 & $.11$ & 0.72 \\ 
+  Social support in physics & 0 & 0.19 & -0.01 & $1.00$ & 1 \\ 
+  Age & -0.11 & 0.2 & -0.52 & $.60$ & 0.9 \\ 
+    &  &  &  &  &  \\ 
+  $R^2_{\text{adj}}$  & 0.29 &  &  &  &  \\ 
+   \bottomrule
+\end{tabular}\end{table}
+
+
+
+% \begin{figure}
+% \centering
+% % \includegraphics[width=.7\textwidth]{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/ordinal_regression/img/boxplot}
+% \input{D:/studies/WinnerS/Erhebungen/IPhO1718/paper/problem_solving/results/img/boxplot}
+% \caption{Problem conceptualization scores over highest achieved round of participant.}
+% \label{problem_concept_skills}
+% \end{figure}
+
+\end{document}
