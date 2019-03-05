@@ -1,0 +1,42 @@
+\documentclass[C:/Users/Peter/Desktop/winners/IPhO1718/paper/probsol_paper/main/TaylorFrancis/interactapasample]{subfiles}
+
+
+%\usepackage{Sweave}
+
+\begin{document}
+\SweaveOpts{concordance=F, echo = F, results = tex}
+
+<<>>=
+where <- "work"
+if( where=="home" ){
+  dir <- "D:/studies/WinnerS/Erhebungen/IPhO1718/"
+} else {
+  dir <- "C:/Users/Peter/Desktop/winners/IPhO1718/"
+}
+setwd( paste0( dir, "paper/probsol_paper/analyses/" ) )
+
+library(psych)
+library(xtable)
+library(openxlsx)
+library(car)
+library(BasicFunctions)
+
+load( paste0( dir, "/data/data.RData") )
+load( paste0( dir, "/data/clean/d_pop.RData") )
+
+
+dd <- rbind( data.frame( Quali = d.pop$QualiR2+1, Gesamt = d.pop$Gesamt, 
+                         Group = "population" ),
+             data.frame( Quali = d$Quali[ d$Quali%in%c(1,2) & !is.na(d$probSol.c.2) ], 
+                         Gesamt = d$achievR1.1[ d$Quali%in%c(1,2) & !is.na(d$probSol.c.2) ], 
+                         Group = "study" ) )
+
+# Analyze proportions of not handed in:
+# sum( d$notHandedR1.1==1, na.rm = T )/nrow(d)
+# sum( d.pop$Nicht.abgegeben==1, na.rm = T )/nrow(d.pop)
+
+@
+
+Limitations in interpretability and generalizability arise with respect to potential selection bias with regards to the general olympian population. It should be noted that only a fraction of the students that participated in the Physics Olympiad also took part in the online questionnaire. Subjects in this study are the same age as the overall population of olympians \Sexpr{fine.t.test( d$Klassenstufe.1[ !is.na( d$probSol.c.2 )], d.pop$Klassenstufe, groups = c("study","population") )}, however, subjects in this study perform better with regards to participants in general population \Sexpr{fine.t.test( d$achievR1.1[ !is.na( d$probSol.c.2 )], d.pop$Gesamt, groups = c("study","population") )} (medium size effect). Closer examination reveals that this performance advantage stems from the fact that students with highest round equal 1 outperform students with highest round equal 1 in the population (\Sexpr{fine.t.test( dd$Gesamt[ dd$Group=="study" & dd$Quali==1 ], dd$Gesamt[ dd$Group=="population" & dd$Quali==1 ], groups = c("study","population") )}). Students in stage 2 do not differ significantly in competition performance. This supports the conclusions that effects in the general population with regards to cognitive variables might be too conservative in this study. However, all reported effects are interindividual rather than intraindividual, and when disaggregated by different stages (e.g., ordinal regression for stage 1 to 2, and stage 2 to 3) statistical power was not sufficient to detect effected for round 2 to 3 or 4. The reported effects should be taken as interindividual indicators what differentiated students particularly from round 1 and 2. The sample size in the higher rounds is in fact so low that effects cannot separated from noise. Furthermore, general cognitive abilities were assessed through only a subset of items of the full inventory. This has to be factored into conclusions regarding the importance of general cognitive abilities regarding success in the Physics Olympiad.
+
+\end{document}
